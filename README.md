@@ -20,23 +20,23 @@ All pset submissions received scores of 100% from the CS50x gradebook.
 - [Project 6a: Parser](https://cs50.harvard.edu/ai/2020/projects/6/parser/)
 - [Project 6b: Questions](https://cs50.harvard.edu/ai/2020/projects/6/questions/)
 
-#####Week 0
+##### Week 0
 Search
 
-#####Week 1
+##### Week 1
 Knowledge
 
-#####Week 2
+##### Week 2
 Uncertainty    
 
-#####Week 3
+##### Week 3
 Optimization
 
-#####Week 4
+##### Week 4
 Learning
     
-#####Week 5
+##### Week 5
 Neural Networks
 
-#####Week 6
+##### Week 6
 Language

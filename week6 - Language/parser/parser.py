@@ -1,5 +1,6 @@
 import nltk
 import sys
+import re
 
 TERMINALS = """
 Adj -> "country" | "dreadful" | "enigmatical" | "little" | "moist" | "red"
@@ -15,12 +16,12 @@ V -> "smiled" | "tell" | "were"
 """
 
 NONTERMINALS = """
-S -> NP VP
+S -> NP VP | NP VP CP
 
-    AP -> A | A AP
-    NP -> N | D NP | AP NP | N PP
-    PP -> P NP
-    VP -> V | V NP | V NP PP
+VP -> V | V NP | VP NP | VP PP | VP Adv | Adv VP | Adj VP
+NP -> N | Adv N |  Adv NP | Adj N | Adj NP | Det N | Det NP | N Adj | N Adv | N PP | N P S
+PP -> P NP
+CP -> Conj S | Conj VP
 """
 
 grammar = nltk.CFG.fromstring(NONTERMINALS + TERMINALS)
@@ -60,6 +61,10 @@ def main():
             print(" ".join(np.flatten()))
 
 
+def contains_letters(phrase):
+    return bool(re.search('[a-zA-Z]', phrase))
+
+
 def preprocess(sentence):
     """
     Convert `sentence` to a list of its words.
@@ -68,9 +73,10 @@ def preprocess(sentence):
     character.
     """
     # raise NotImplementedError
-    word_list = [word for word in sentence if word.isalnum()]
+    sentence = sentence.lower()
+    result = [word for word in nltk.word_tokenize(sentence) if contains_letters(word)]
+    return result
 
-    print(word_list)
 
 def np_chunk(tree):
     """
@@ -79,7 +85,20 @@ def np_chunk(tree):
     whose label is "NP" that does not itself contain any other
     noun phrases as subtrees.
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    chunks = []
+    for subtree in tree.subtrees():
+        if subtree.label() == 'NP':
+            chunk = subtree.subtrees()
+            # start at -1 to account for NP label of the subtree
+            count = -1
+            # loop through the subtrees subtree
+            for item in chunk:
+                if item.label() == 'NP':
+                    count += 1
+            if count == 0:
+                chunks.append(subtree)
+    return chunks
 
 
 if __name__ == "__main__":
